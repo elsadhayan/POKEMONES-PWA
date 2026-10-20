@@ -1,5 +1,8 @@
 const URL_API = 'https://pokeapi.co/api/v2/pokemon?limit=20';
 const container = document.getElementById('pokemon-container');
+const vistaLista = document.getElementById('vista-lista');
+const vistaDetalle = document.getElementById('vista-detalle');
+const detalleContainer = document.getElementById('detalle-container');
 
 document.addEventListener('DOMContentLoaded', () => {
     obtenerPokemones();
@@ -14,7 +17,7 @@ async function obtenerPokemones() {
             await obtenerDetallePokemon(pokemon.url);
         }
     } catch (error) {
-        console.error('Error al obtener la lista de pokemones:', error);
+        console.error('Error al obtener la lista:', error);
     }
 }
 
@@ -45,6 +48,43 @@ function crearCard(poke) {
     container.appendChild(card);
 }
 
-function verDetalle(id) {
-    window.location.href = `detalle.html?id=${id}`;
+// Muestra la vista de detalles sin cambiar de página
+async function verDetalle(id) {
+    vistaLista.classList.add('oculto');
+    vistaDetalle.classList.remove('oculto');
+    window.scrollTo(0, 0);
+
+    detalleContainer.innerHTML = '<p>Cargando información del Pokémon...</p>';
+
+    try {
+        const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const poke = await respuesta.json();
+
+        const imagen = poke.sprites.other['official-artwork'].front_default || poke.sprites.front_default;
+        const tipos = poke.types.map(t => `<span class="badge-tipo">${t.type.name}</span>`).join(' ');
+        const habilidades = poke.abilities.map(a => a.ability.name).join(', ');
+        const stats = poke.stats.map(s => `<li><span>${s.stat.name.toUpperCase()}</span> <strong>${s.base_stat}</strong></li>`).join('');
+
+        detalleContainer.innerHTML = `
+            <img src="${imagen}" alt="${poke.name}">
+            <h2>#${poke.id} - ${poke.name.toUpperCase()}</h2>
+            <div class="tipos-container">${tipos}</div>
+            <div class="info-grid">
+                <p><strong>Altura:</strong> ${poke.height / 10} m</p>
+                <p><strong>Peso:</strong> ${poke.weight / 10} kg</p>
+            </div>
+            <p class="habilidades"><strong>Habilidades:</strong> ${habilidades}</p>
+            <hr class="separador">
+            <h3>Estadísticas Base</h3>
+            <ul class="stats-list">${stats}</ul>
+        `;
+    } catch (error) {
+        console.error('Error al cargar detalle:', error);
+        detalleContainer.innerHTML = '<p>Error al cargar el Pokémon offline.</p>';
+    }
+}
+
+function cerrarDetalle() {
+    vistaDetalle.classList.add('oculto');
+    vistaLista.classList.remove('oculto');
 }

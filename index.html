@@ -11,25 +11,36 @@
 
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo"> PokePWA</div>
+        <div class="logo">⚡ PokePWA</div>
         <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#" onclick="cerrarDetalle()">Inicio</a></li>
         </ul>
     </nav>
 
-    <h2 class="main-title">Listado de Pokémon</h2>
+    <!-- Vista Principal (Lista) -->
+    <div id="vista-lista">
+        <h2 class="main-title">Listado de Pokémon</h2>
+        <main>
+            <section id="pokemon-container" class="grid-container"></section>
+        </main>
+    </div>
 
-    <main>
-    
-        <section id="pokemon-container" class="grid-container">
-        </section>
-    </main>
+    <!-- Vista de Detalle (Oculta por defecto) -->
+    <div id="vista-detalle" class="oculto">
+        <nav class="navbar" style="background: #333;">
+            <button onclick="cerrarDetalle()" class="btn-volver">⬅ Volver a la Lista</button>
+        </nav>
+        <h2 class="main-title">Detalle del Pokémon</h2>
+        <main>
+            <section id="detalle-container" class="detalle-card"></section>
+        </main>
+    </div>
 
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./serviceworker.js')
-                .then(() => console.log('Service Worker registrado correctamente'))
-                .catch(err => console.log('Error al registrar Service Worker', err));
+                .then(() => console.log('SW listo'))
+                .catch(err => console.log('Error SW:', err));
         }
     </script>
     <script src="js/app.js"></script>
