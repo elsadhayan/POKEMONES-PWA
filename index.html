@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokePWA - Pokedex</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo"> PokePWA</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+        </ul>
+    </nav>
+
+    <h2 class="main-title">Listado de Pokémon</h2>
+
+    <main>
+    
+        <section id="pokemon-container" class="grid-container">
+        </section>
+    </main>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./serviceworker.js')
+                .then(() => console.log('Service Worker registrado correctamente'))
+                .catch(err => console.log('Error al registrar Service Worker', err));
+        }
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>
